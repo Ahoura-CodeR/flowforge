@@ -5,6 +5,8 @@ projects, team roles, tasks, a drag-and-drop Kanban board, comments and a change
 
 **Stack:** Next.js (App Router) · TypeScript · NestJS · PostgreSQL · TypeORM · TanStack Query
 
+![The board](docs/board.jpg)
+
 ## Features
 
 - Accounts with JWT authentication and system roles (`admin`, `member`)
