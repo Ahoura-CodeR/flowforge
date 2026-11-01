@@ -1,0 +1,13 @@
+# One-click demo deployment: Render builds deploy/Dockerfile from this repo.
+services:
+  - type: web
+    name: flowforge-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./deploy/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
