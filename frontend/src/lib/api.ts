@@ -1,6 +1,12 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 const TOKEN_KEY = "flowforge.token";
 
+// A relative NEXT_PUBLIC_API_URL (the single-origin demo build) needs the page origin.
+function absolute(path: string): string {
+  const target = BASE_URL + path;
+  return target.startsWith("http") ? target : window.location.origin + target;
+}
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -36,7 +42,7 @@ export async function api<T>(
   path: string,
   { method = "GET", body, query }: RequestOptions = {},
 ): Promise<T> {
-  const url = new URL(BASE_URL + path);
+  const url = new URL(absolute(path));
   for (const [key, value] of Object.entries(query ?? {})) {
     if (value === undefined || value === null || value === "") continue;
     url.searchParams.set(key, Array.isArray(value) ? value.join(",") : String(value));
