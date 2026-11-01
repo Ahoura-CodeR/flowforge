@@ -7,6 +7,8 @@ projects, team roles, tasks, a drag-and-drop Kanban board, comments and a change
 
 **Stack:** Next.js (App Router) · TypeScript · NestJS · PostgreSQL · TypeORM · TanStack Query
 
+**Live demo:** https://flowforge-demo.onrender.com — sign in with `admin@flowforge.local` / `admin12345`, or create an account. The free instance sleeps when idle, so the first request after a pause can take about a minute to wake up.
+
 ![The board](docs/board.jpg)
 
 ## Features
