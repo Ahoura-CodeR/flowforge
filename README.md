@@ -1,5 +1,7 @@
 # FlowForge
 
+[![CI](https://github.com/Ahoura-CodeR/flowforge/actions/workflows/ci.yml/badge.svg)](https://github.com/Ahoura-CodeR/flowforge/actions/workflows/ci.yml)
+
 A multi-user project management app in the spirit of Linear and Jira, at small scale:
 projects, team roles, tasks, a drag-and-drop Kanban board, comments and a change history.
 
