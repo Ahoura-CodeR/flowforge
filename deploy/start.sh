@@ -20,6 +20,8 @@ export JWT_SECRET="${JWT_SECRET:-demo-only-secret-please-do-not-reuse-0123456789
 export SEED_ADMIN_EMAIL=admin@flowforge.local SEED_ADMIN_PASSWORD=admin12345
 PUBLIC_PORT="${PORT:-7860}"
 export NODE_ENV=production PORT=4000 CORS_ORIGIN="*"
+# 512 MB for everything: keep each node process small instead of letting the OOM killer choose.
+export NODE_OPTIONS="--max-old-space-size=180"
 
 # Debian keeps the server binaries outside PATH.
 PGBIN="$(ls -d /usr/lib/postgresql/*/bin 2>/dev/null | head -1)"
@@ -37,7 +39,7 @@ fi
 
 echo "[boot] postgres"
 # Tuned for a 512 MB instance.
-$PG "$PGBIN/pg_ctl -D '$PGDATA' -o '-p 5433 -k /tmp -c shared_buffers=48MB -c max_connections=20' -l /tmp/pg.log -w start"
+$PG "$PGBIN/pg_ctl -D '$PGDATA' -o '-p 5433 -k /tmp -c shared_buffers=32MB -c max_connections=10 -c work_mem=2MB -c maintenance_work_mem=16MB -c fsync=off' -l /tmp/pg.log -w start"
 until "$PGBIN/pg_isready" -h 127.0.0.1 -p 5433 -U flowforge >/dev/null 2>&1; do sleep 1; done
 $PG "$PGBIN/createdb -h 127.0.0.1 -p 5433 -U flowforge flowforge" 2>/dev/null || true
 
@@ -56,4 +58,5 @@ npx next start -p 3000 > /tmp/web.log 2>&1 &
 wait_for http://127.0.0.1:3000/login "web" /tmp/web.log
 
 echo "[boot] ready on port $PUBLIC_PORT"
+( free -m 2>/dev/null || true; ps -o pid,rss,comm -C node 2>/dev/null || true ) | sed 's/^/[mem] /'
 exec env PORT="$PUBLIC_PORT" node /proxy.js
