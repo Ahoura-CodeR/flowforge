@@ -18,8 +18,8 @@ export PGDATA=/tmp/pg PGPORT=5433
 export DB_HOST=127.0.0.1 DB_PORT=5433 DB_USER=flowforge DB_PASSWORD= DB_NAME=flowforge
 export JWT_SECRET="${JWT_SECRET:-demo-only-secret-please-do-not-reuse-0123456789}"
 export SEED_ADMIN_EMAIL=admin@flowforge.local SEED_ADMIN_PASSWORD=admin12345
+PUBLIC_PORT="${PORT:-7860}"
 export NODE_ENV=production PORT=4000 CORS_ORIGIN="*"
-WEB_PORT="${PORT:-7860}"
 
 # Debian keeps the server binaries outside PATH.
 PGBIN="$(ls -d /usr/lib/postgresql/*/bin 2>/dev/null | head -1)"
@@ -55,5 +55,5 @@ cd /app/frontend
 npx next start -p 3000 > /tmp/web.log 2>&1 &
 wait_for http://127.0.0.1:3000/login "web" /tmp/web.log
 
-echo "[boot] ready on port $WEB_PORT"
-exec node /proxy.js
+echo "[boot] ready on port $PUBLIC_PORT"
+exec env PORT="$PUBLIC_PORT" node /proxy.js
