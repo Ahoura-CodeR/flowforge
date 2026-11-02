@@ -6,7 +6,7 @@ services:
     plan: free
     dockerfilePath: ./deploy/Dockerfile
     dockerContext: .
-    healthCheckPath: /login
+    healthCheckPath: /_boot
     autoDeploy: true
     envVars:
       - key: JWT_SECRET
